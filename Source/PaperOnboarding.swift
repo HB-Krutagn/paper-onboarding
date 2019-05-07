@@ -157,22 +157,41 @@ extension PaperOnboarding {
     }
 
     fileprivate func createPageView() -> PageView {
-        let pageView = PageView.pageViewOnView(
-            self,
-            itemsCount: itemsCount,
-            bottomConstant: pageViewBottomConstant * -1,
-            radius: pageViewRadius,
-            selectedRadius: pageViewSelectedRadius,
-            itemColor: { [weak self] in
-                guard let dataSource = self?.dataSource as? PaperOnboardingDataSource else { return .white }
-                return dataSource.onboardingPageItemColor(at: $0)
-        })
-
-        pageView.configuration = { [weak self] item, index in
-            item.imageView?.image = self?.itemsInfo?[index].pageIcon
+        let screenMaxLength = max(UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height)
+        let iPhone10 = UIDevice.current.userInterfaceIdiom == .phone && screenMaxLength >= 812.0
+        if iPhone10{
+            let pageView = PageView.pageViewOnView(
+                self,
+                itemsCount: itemsCount,
+                bottomConstant: pageViewBottomConstant * -0.7,
+                radius: pageViewRadius,
+                selectedRadius: pageViewSelectedRadius - 3,
+                itemColor: { [weak self] in
+                    guard let dataSource = self?.dataSource as? PaperOnboardingDataSource else { return .white }
+                    return dataSource.onboardingPageItemColor(at: $0)
+            })
+            
+            pageView.configuration = { [weak self] item, index in
+                item.imageView?.image = self?.itemsInfo?[index].pageIcon
+            }
+            return pageView
+        }else{
+            let pageView = PageView.pageViewOnView(
+                self,
+                itemsCount: itemsCount,
+                bottomConstant: pageViewBottomConstant * -0.3,
+                radius: pageViewRadius,
+                selectedRadius: pageViewSelectedRadius - 3,
+                itemColor: { [weak self] in
+                    guard let dataSource = self?.dataSource as? PaperOnboardingDataSource else { return .white }
+                    return dataSource.onboardingPageItemColor(at: $0)
+            })
+            
+            pageView.configuration = { [weak self] item, index in
+                item.imageView?.image = self?.itemsInfo?[index].pageIcon
+            }
+            return pageView
         }
-
-        return pageView
     }
 
     fileprivate func createItemsInfo() -> [OnboardingItemInfo] {
