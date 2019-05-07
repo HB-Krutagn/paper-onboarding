@@ -78,19 +78,67 @@ private extension OnboardingContentViewItem {
         let imageView = createImage(self)
 
         // added constraints
-        titleCenterConstraint = (self, titleLabel, imageView) >>>- {
-            $0.attribute = .top
-            $0.secondAttribute = .bottom
-            $0.constant = 50
-            return
-        }
-        (self, descriptionLabel, titleLabel) >>>- {
-            $0.attribute = .top
-            $0.secondAttribute = .bottom
-            $0.constant = 10
-            return
+//         titleCenterConstraint = (self, titleLabel, imageView) >>>- {
+//             $0.attribute = .top
+//             $0.secondAttribute = .bottom
+//             $0.constant = 50
+//             return
+//         }
+//         (self, descriptionLabel, titleLabel) >>>- {
+//             $0.attribute = .top
+//             $0.secondAttribute = .bottom
+//             $0.constant = 10
+//             return
+//         }
+
+        let interface = UIApplication.shared.statusBarOrientation
+        let titleLabel = createTitleLabel(self)
+        let descriptionLabel = createDescriptionLabel(self)
+        let imageView = createImage(self)
+        
+        // added constraints
+        let screenMaxLength = max(UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height)
+        let iPhone5 = UIDevice.current.userInterfaceIdiom == .phone && screenMaxLength == 568.0
+        let iPhone10 = UIDevice.current.userInterfaceIdiom == .phone && screenMaxLength >= 812.0
+        
+        if iPhone5 || iPhone10{
+            titleCenterConstraint = (self, titleLabel, imageView) >>>- {
+                $0.attribute = .top
+                $0.secondAttribute = .bottom
+                $0.constant = 0
+                return
+            }
+            (self, descriptionLabel, titleLabel) >>>- {
+                $0.attribute = .top
+                $0.secondAttribute = .bottom
+                $0.constant = 20
+                return
+            }
+        }else{
+            if interface.isPortrait{
+                titleCenterConstraint = (self, titleLabel, imageView) >>>- {
+                    $0.attribute = .top
+                    $0.secondAttribute = .bottom
+                    $0.constant = 50
+                    return
+                }
+            }else{
+                titleCenterConstraint = (self, titleLabel, imageView) >>>- {
+                    $0.attribute = .top
+                    $0.secondAttribute = .bottom
+                    $0.constant = 20
+                    return
+                }
+            }
+            (self, descriptionLabel, titleLabel) >>>- {
+                $0.attribute = .top
+                $0.secondAttribute = .bottom
+                $0.constant = 10
+                return
+            }
         }
 
+        
         self.titleLabel = titleLabel
         self.descriptionLabel = descriptionLabel
         self.imageView = imageView
