@@ -92,9 +92,6 @@ private extension OnboardingContentViewItem {
 //         }
 
         let interface = UIApplication.shared.statusBarOrientation
-        let titleLabel = createTitleLabel(self)
-        let descriptionLabel = createDescriptionLabel(self)
-        let imageView = createImage(self)
         
         // added constraints
         let screenMaxLength = max(UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height)
